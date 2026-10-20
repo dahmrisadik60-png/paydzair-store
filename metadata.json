@@ -1,0 +1,6 @@
+{
+  "name": "DzairPay - متجر شحن الألعاب والتطبيقات",
+  "description": "منصة DzairPay الجزائرية لشحن الألعاب والشدات والكوينز والبطاقات الرقمية والاشتراكات الفورية بأفضل الأسعار.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

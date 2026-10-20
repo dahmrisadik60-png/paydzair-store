@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DzairPay - متجر شحن الألعاب والتطبيقات</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dzPurple: '#7c3aed',
+                        dzPurpleDark: '#6d28d9',
+                        dzPurpleHeader: '#7A20DF',
+                        dzGreen: '#10b981',
+                        dzGreenNeon: '#00ff88',
+                        dzGreenDark: '#032014'
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .hero-matrix-bg {
+            background: linear-gradient(135deg, #021a10 0%, #063821 50%, #02150d 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-matrix-bg::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(0, 255, 136, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .card-glow-green {
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
+            border: 2px solid rgba(0, 255, 136, 0.5);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Top Bar -->
+    <header class="bg-[#7A20DF] text-white text-xs py-2 px-4 shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <a href="#" class="flex items-center gap-1 hover:text-purple-200 transition">
+                    <i class="fa-solid font-bold fa-headset text-sm"></i>
+                    <span id="displayTopPhone">0770-99-16-99</span>
+                </a>
+                <span class="text-purple-300">|</span>
+                <a href="#" class="flex items-center gap-1 hover:text-purple-200 transition">
+                    <i class="fa-regular fa-envelope text-sm"></i>
+                    <span id="displayTopEmail">contact@dzairpay.com</span>
+                </a>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="bg-purple-800/60 text-purple-100 text-[11px] px-2.5 py-0.5 rounded-full font-semibold border border-purple-400/30">
+                    <i class="fa-solid fa-globe text-xs ml-1"></i> العربية
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Navbar -->
+    <nav class="bg-slate-800 border-b border-slate-700 sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-8">
+                <a href="#" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 bg-purple-900/50 rounded-xl flex items-center justify-center text-[#7A20DF] font-black text-xl border border-purple-500/30 group-hover:scale-105 transition">
+                        <i class="fa-solid fa-bolt text-purple-400"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight text-white">
+                            Dzair<span class="text-[#7A20DF]">Pay</span>
+                        </span>
+                        <span class="block text-[10px] text-purple-400 -mt-1 font-semibold">STORE</span>
+                    </div>
+                </a>
+
+                <div class="hidden lg:flex items-center gap-6 text-sm font-bold text-slate-300">
+                    <a href="#" class="text-[#7A20DF] font-extrabold flex items-center gap-1">الرئيسية</a>
+                    <a href="#games-section" class="hover:text-[#7A20DF] transition">شحن مباشر</a>
+                    <a href="#giftcards" class="hover:text-[#7A20DF] transition">بطاقات</a>
+                    <a href="#subscriptions" class="hover:text-[#7A20DF] transition">الاشتراكات</a>
+                    <a href="#accounts" class="hover:text-[#7A20DF] transition">حسابات جاهزة</a>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="bg-purple-900/80 backdrop-blur border border-purple-500/40 rounded-full px-3 py-1.5 flex items-center gap-2">
+                    <i class="fas font-bold text-xs bg-purple-500/30 p-1 rounded-full text-yellow-300">€</i>
+                    <span class="text-xs text-purple-200 hidden sm:inline">الرصيد:</span>
+                    <span id="userBalance" class="font-bold text-emerald-400 text-sm">25.00 €</span>
+                </div>
+                <button onclick="openAdminModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-md">
+                    <i class="fas fa-user-shield"></i>
+                    <span class="hidden sm:inline">لوحة التحكم</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <section class="max-w-7xl mx-auto px-4 my-6">
+        <div class="hero-matrix-bg rounded-3xl p-6 md:p-10 border border-emerald-900/60 shadow-2xl relative overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                <div class="lg:col-span-6 order-2 lg:order-1 flex justify-center items-center">
+                    <div class="relative flex items-center justify-center gap-2 max-w-full">
+                        <div class="relative w-36 sm:w-48 rounded-2xl overflow-hidden card-glow-green transform -rotate-3 hover:rotate-0 transition duration-300">
+                            <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=600&q=80" alt="Suarez" class="w-full h-52 object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-3 text-white">
+                                <span class="bg-yellow-400 text-black font-black text-xs px-2 py-0.5 rounded w-max mb-1">CF 99</span>
+                                <h4 class="font-black text-sm">L. SUAREZ</h4>
+                            </div>
+                        </div>
+                        <div class="relative w-36 sm:w-48 rounded-2xl overflow-hidden card-glow-green transform rotate-3 hover:rotate-0 transition duration-300 -mr-6 border-2 border-emerald-400">
+                            <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80" alt="Casillas" class="w-full h-52 object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent flex flex-col justify-end p-3 text-white">
+                                <span class="bg-emerald-400 text-black font-black text-xs px-2 py-0.5 rounded w-max mb-1">GK 100</span>
+                                <h4 class="font-black text-sm">I. CASILLAS</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-6 order-1 lg:order-2 text-right text-white">
+                    <div class="inline-flex items-center gap-2 bg-slate-800/80 border border-emerald-500/30 text-emerald-400 text-xs px-3 py-1 rounded-full mb-4 font-bold">
+                        <i class="fa-solid fa-fire text-amber-400"></i>
+                        <span>عروض حصرية اليوم</span>
+                    </div>
+                    <h1 class="text-3xl md:text-5xl font-black mb-4 leading-tight text-white drop-shadow-md">
+                        عروض الشحن السريع
+                    </h1>
+                    <p class="text-slate-300 text-sm md:text-base mb-6 leading-relaxed">
+                        احصل على أفضل أسعار شحن الكوينز والشدات والجواهر والاشتراكات الرقمية فوراً مع تسليم آمن ومضمون 100%!
+                    </p>
+                    <a href="#games-section" class="bg-[#7A20DF] hover:bg-purple-700 text-white font-bold px-8 py-3 rounded-full transition shadow-lg shadow-purple-900/50 inline-flex items-center gap-2">
+                        <span>تصفح العروض</span>
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main id="games-section" class="max-w-7xl mx-auto px-4 mb-16 flex-grow w-full">
+        <div class="mb-6">
+            <h2 class="text-2xl font-black text-white flex items-center gap-2 mb-1">
+                عروض شحن الألعاب <i class="fa-solid fa-fire text-orange-500"></i>
+            </h2>
+            <p class="text-gray-400 text-sm font-semibold">اختر لعبتك المفضلة وابدأ الشحن الفوري</p>
+        </div>
+
+        <div id="gamesTabs" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8"></div>
+
+        <div class="mb-6">
+            <h3 class="text-xl font-bold text-white mb-4">اختر الباقة المناسبة</h3>
+            <div id="packagesContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- Gift Cards Section -->
+        <div id="giftcards" class="mt-12 pt-8 border-t border-slate-800">
+            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fas fa-gift text-purple-400"></i> بطاقات الهدايا
+            </h3>
+            <div id="cardsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- Subscriptions Section -->
+        <div id="subscriptions" class="mt-12 pt-8 border-t border-slate-800">
+            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fas fa-tv text-purple-400"></i> الاشتراكات الرقمية
+            </h3>
+            <div id="subsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- Accounts Section -->
+        <div id="accounts" class="mt-12 pt-8 border-t border-slate-800">
+            <h3 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fas fa-shield-alt text-purple-400"></i> حسابات جاهزة قوية
+            </h3>
+            <div id="accountsContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-white pt-12 pb-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-right text-sm text-slate-400">
+                <div>
+                    <span class="text-xl font-black text-white block mb-3">DzairPay</span>
+                    <p class="leading-relaxed">المنصة الأولى والأسرع لشحن الألعاب والبطاقات الإلكترونية بأسعار تنافسية ودعم موثوق.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-3">روابط سريعة</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">عن المتجر</a></li>
+                        <li><a href="#" class="hover:text-white transition">سياسة الخصوصية</a></li>
+                        <li><a href="#" class="hover:text-white transition">شروط الاستخدام</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-3">الدعم والمساعدة</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">الأسئلة الشائعة</a></li>
+                        <li><a href="#" class="hover:text-white transition">كيفية الشراء</a></li>
+                        <li><a href="#" class="hover:text-white transition">الدعم الفني</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-3">تواصل معنا</h4>
+                    <p class="mb-1">الهاتف: <span id="displayFooterPhone" class="text-white font-bold">0770-99-16-99</span></p>
+                    <p class="mb-1">البريد: <span id="displayFooterEmail" class="text-white">contact@dzairpay.com</span></p>
+                </div>
+            </div>
+            <div class="border-t border-slate-900 pt-6 text-center text-xs text-slate-500">
+                <p>جميع الحقوق محفوظة © 2026 DzairPay Store</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Purchase (نافذة الشراء) -->
+    <div id="purchaseModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-6 shadow-2xl relative text-right text-white">
+            <button onclick="closePurchaseModal()" class="absolute top-4 left-4 text-gray-400 hover:text-white w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div id="modalContent">
+                <h3 id="modalTitle" class="text-xl font-black mb-2 text-purple-400"></h3>
+                <p class="text-xs text-gray-400 mb-4">أدخل بيانات الحساب لإتمام العملية بسرعة وسلاسة.</p>
+                
+                <div class="mb-4">
+                    <label class="block text-xs font-bold mb-1 text-gray-300">آيدي الحساب (Player ID / Email):</label>
+                    <input type="text" id="playerIdInput" placeholder="أدخل ID الخاص بك" class="w-full p-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500">
+                </div>
+
+                <div class="bg-slate-800/80 p-3 rounded-xl mb-4 flex justify-between items-center text-sm border border-slate-700">
+                    <span class="text-gray-400">المبلغ المطلوب:</span>
+                    <span id="modalPrice" class="font-black text-emerald-400 text-base"></span>
+                </div>
+
+                <div id="modalMsg" class="hidden text-xs font-bold mb-3 p-2.5 rounded-xl"></div>
+
+                <button onclick="processPurchase()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 text-white font-bold py-3 rounded-xl transition shadow-lg">
+                    تأكيد الشراء الآن
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin (نافذة لوحة التحكم) -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 text-white rounded-3xl max-w-2xl w-full p-6 md:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto text-right">
+            <button onclick="closeAdminModal()" class="absolute top-4 left-4 text-gray-400 hover:text-white w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Admin Login -->
+            <div id="adminLoginSection" class="py-8 text-center max-w-sm mx-auto">
+                <div class="w-16 h-16 bg-purple-900/50 text-purple-300 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl font-bold border border-purple-500/30">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-xl font-black mb-2">لوحة تحكم المشرف</h3>
+                <p class="text-gray-400 text-xs mb-6">رمز الدخول الافتراضي: <span class="text-amber-400 font-bold">2009</span></p>
+                <input type="password" id="adminPasswordInput" placeholder="كلمة المرور" class="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white mb-4 text-center text-lg tracking-widest font-bold focus:outline-none focus:border-purple-500">
+                <button onclick="verifyAdminPassword()" class="w-full bg-[#7A20DF] hover:bg-purple-700 text-white font-bold py-3 rounded-xl transition shadow-md">
+                    دخول اللوحة
+                </button>
+                <p id="adminErrorMsg" class="text-red-400 text-xs font-bold mt-2 hidden">كلمة السر خاطئة!</p>
+            </div>
+
+            <!-- Admin Dashboard -->
+            <div id="adminDashboardSection" class="hidden">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                    <h3 class="text-xl font-black text-white flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-purple-400"></i> إعدادات المتجر
+                    </h3>
+                    <span class="bg-emerald-900/50 text-emerald-400 border border-emerald-500/30 text-xs px-3 py-1 rounded-full font-bold">مشرف معتمد</span>
+                </div>
+
+                <div class="flex border-b border-slate-800 mb-6 gap-4 text-sm font-bold">
+                    <button onclick="switchAdminTab('packages')" id="tabBtnPackages" class="pb-2 border-b-2 border-purple-500 text-purple-400">إدارة الباقات</button>
+                    <button onclick="switchAdminTab('balance')" id="tabBtnBalance" class="pb-2 border-b-2 border-transparent text-gray-400 hover:text-white">شحن رصيد</button>
+                    <button onclick="switchAdminTab('general')" id="tabBtnGeneral" class="pb-2 border-b-2 border-transparent text-gray-400 hover:text-white">إعدادات عامة</button>
+                </div>
+
+                <!-- Admin Tab: Packages -->
+                <div id="adminTabPackages" class="space-y-4">
+                    <h4 class="font-bold text-white text-sm">إضافة باقة شحن جديدة باليورو (€)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">اللعبة</label>
+                            <select id="adminGameSelect" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm font-bold text-white">
+                                <option value="efootball">eFootball 2024</option>
+                                <option value="pubg">PUBG Mobile</option>
+                                <option value="freefire">Free Fire</option>
+                                <option value="roblox">Roblox</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">اسم الباقة</label>
+                            <input type="text" id="adminPkgName" placeholder="1000 كوينز" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">السعر (€)</label>
+                            <input type="number" step="0.01" id="adminPkgPrice" placeholder="4.99" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white">
+                        </div>
+                    </div>
+                    <button onclick="addNewPackage()" class="bg-purple-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-purple-500 transition">إضافة الباقة</button>
+
+                    <div class="mt-6 pt-4 border-t border-slate-800">
+                        <h4 class="font-bold text-white text-sm mb-3">الباقات الحالية</h4>
+                        <div id="adminPackagesList" class="space-y-2 max-h-48 overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- Admin Tab: Add Balance -->
+                <div id="adminTabBalance" class="space-y-4 hidden">
+                    <h4 class="font-bold text-white text-sm">إضافة رصيد حساب تجريبي (€)</h4>
+                    <div class="flex gap-3">
+                        <input type="number" id="adminAddBalanceInput" placeholder="أدخل المبلغ (مثلاً 50)" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white">
+                        <button onclick="addBalanceAdmin()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-2.5 rounded-xl text-sm transition">شحن</button>
+                    </div>
+                </div>
+
+                <!-- Admin Tab: General -->
+                <div id="adminTabGeneral" class="space-y-4 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 mb-1">رقم الهاتف</label>
+                            <input type="text" id="cfgStorePhone" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm font-bold text-white" value="0770-99-16-99">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 mb-1">البريد الإلكتروني</label>
+                            <input type="email" id="cfgStoreEmail" class="w-full p-2.5 bg-slate-800 border border-slate-700 rounded-xl text-sm font-bold text-white" value="contact@dzairpay.com">
+                        </div>
+                    </div>
+                    <button onclick="saveGeneralSettings()" class="bg-purple-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm hover:bg-purple-500 transition">حفظ التغييرات</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Core -->
+    <script>
+        const defaultData = {
+            games: [
+                { id: 'efootball', name: 'eFootball 2024', icon: 'fa-futbol', color: 'from-blue-600 to-indigo-800', tag: 'الأكثر طلباً' },
+                { id: 'pubg', name: 'PUBG Mobile', icon: 'fa-crosshairs', color: 'from-amber-500 to-orange-700', tag: 'عرض خاص' },
+                { id: 'freefire', name: 'Free Fire', icon: 'fa-fire', color: 'from-red-500 to-rose-700', tag: 'شحن سريع' },
+                { id: 'roblox', name: 'Roblox', icon: 'fa-cube', color: 'from-slate-600 to-slate-800', tag: '' }
+            ],
+            packages: [
+                { id: 101, gameId: 'efootball', name: '130 كوينز (Coins)', price: 1.49, popular: false },
+                { id: 102, gameId: 'efootball', name: '550 كوينز (Coins)', price: 5.99, popular: true },
+                { id: 103, gameId: 'efootball', name: '1040 كوينز (Coins)', price: 10.99, popular: false },
+                { id: 201, gameId: 'pubg', name: '60 شدات (UC)', price: 0.99, popular: false },
+                { id: 202, gameId: 'pubg', name: '325 شدات (UC)', price: 4.99, popular: true },
+                { id: 301, gameId: 'freefire', name: '100 جوهرة + بونص', price: 0.99, popular: false },
+                { id: 302, gameId: 'freefire', name: '520 جواهر', price: 4.99, popular: true },
+                { id: 401, gameId: 'roblox', name: '400 روبوكس (Robux)', price: 4.99, popular: false }
+            ],
+            cards: [
+                { id: 501, name: 'بطاقة Google Play $10', category: 'PlayStation', price: 9.99, desc: 'متجر أمريكي / أوروبي' },
+                { id: 502, name: 'بطاقة iTunes $15', category: 'Apple', price: 14.99, desc: 'متجر أبل ستور' },
+                { id: 503, name: 'بطاقة Steam $20', category: 'Steam', price: 19.99, desc: 'شحن محفظة ستيم' }
+            ],
+            subscriptions: [
+                { id: 601, name: 'اشتراك Netflix شهر (HD)', price: 3.99, period: 'شهر واحد' },
+                { id: 602, name: 'اشتراك Shahid VIP شهر', price: 2.99, period: 'شهر واحد' }
+            ],
+            accounts: [
+                { id: 701, name: 'حساب eFootball قوي جداً', price: 45.00, desc: 'تشكيلة إيبك كاملة + كاسياس وسواريز' },
+                { id: 702, name: 'حساب PUBG قديم ميثيك', price: 79.99, desc: 'مشحون من السيزون 6 + أسلحة متطورة' }
+            ]
+        };
+
+        let appData = JSON.parse(localStorage.getItem('dzairpay_data')) || defaultData;
+        let selectedGameId = 'efootball';
+        let userBalance = parseFloat(localStorage.getItem('dzairpay_balance')) || 25.00;
+        let activeItemToBuy = null;
+
+        function saveState() {
+            localStorage.setItem('dzairpay_data', JSON.stringify(appData));
+            localStorage.setItem('dzairpay_balance', userBalance.toString());
+        }
+
+        function formatPrice(price) {
+            return `${parseFloat(price).toFixed(2)} €`;
+        }
+
+        function renderHeader() {
+            document.getElementById('userBalance').innerText = formatPrice(userBalance);
+        }
+
+        function renderGameTabs() {
+            const container = document.getElementById('gamesTabs');
+            if (!container) return;
+            container.innerHTML = appData.games.map(game => `
+                <button onclick="selectGame('${game.id}')" class="p-3 rounded-2xl border transition flex items-center gap-3 text-right ${selectedGameId === game.id ? 'bg-purple-900/60 border-purple-500 shadow-lg text-white' : 'bg-slate-800/80 border-slate-700 text-gray-300 hover:border-slate-500'}">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br ${game.color} flex items-center justify-center text-white text-lg">
+                        <i class="fas ${game.icon}"></i>
+                    </div>
+                    <div class="flex-grow">
+                        <span class="font-bold text-sm block">${game.name}</span>
+                        <span class="text-[10px] text-emerald-400 font-semibold">${game.tag || 'شحن فوري'}</span>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        function selectGame(id) {
+            selectedGameId = id;
+            renderGameTabs();
+            renderPackages();
+        }
+
+        function renderPackages() {
+            const container = document.getElementById('packagesContainer');
+            if (!container) return;
+
+            const filtered = appData.packages.filter(p => p.gameId === selectedGameId);
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-8 text-gray-400">لا توجد حزم متاحة حالياً لهذه اللعبة</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(pkg => `
+                <div class="bg-slate-800/90 rounded-xl border ${pkg.popular ? 'border-amber-500/80 shadow-lg' : 'border-slate-700'} p-4 flex flex-col justify-between hover:border-purple-500 transition-all relative overflow-hidden group">
+                    ${pkg.popular ? '<span class="absolute top-0 left-0 bg-amber-500 text-slate-950 font-bold text-[10px] px-2 py-0.5 rounded-br-lg">الأكثر مبيعاً</span>' : ''}
+                    <div class="mb-3">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-lg bg-purple-900/50 flex items-center justify-center text-purple-400 border border-purple-500/20">
+                                <i class="fas fa-coins text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm group-hover:text-purple-300 transition">${pkg.name}</h4>
+                                <span class="text-xs text-gray-400">شحن فوري بالمعرف (ID)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mt-2 pt-2 border-t border-slate-700/60">
+                        <div>
+                            <span class="text-xs text-gray-400 block">السعر:</span>
+                            <span class="font-extrabold text-emerald-400 text-base">${formatPrice(pkg.price)}</span>
+                        </div>
+                        <button onclick="openPurchaseModal('${pkg.name}', ${pkg.price})" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 text-white text-xs font-bold px-3 py-2 rounded-lg transition shadow-md flex items-center gap-1">
+                            <span>شحن الآن</span>
+                            <i class="fas fa-bolt text-yellow-300"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderCards() {
+            const container = document.getElementById('cardsContainer');
+            if (!container) return;
+            container.innerHTML = appData.cards.map(card => `
+                <div class="bg-slate-800/80 rounded-xl border border-slate-700 p-4 hover:border-purple-500 transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-white text-sm">${card.name}</h4>
+                            <span class="bg-purple-900/60 text-purple-300 text-[10px] px-2 py-0.5 rounded border border-purple-500/30">${card.category}</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mb-3">${card.desc}</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-700">
+                        <span class="font-bold text-emerald-400 text-sm">${formatPrice(card.price)}</span>
+                        <button onclick="openPurchaseModal('${card.name}', ${card.price})" class="bg-slate-700 hover:bg-purple-600 text-white text-xs px-3 py-1.5 rounded-lg transition">شراء</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderSubscriptions() {
+            const container = document.getElementById('subsContainer');
+            if (!container) return;
+            container.innerHTML = appData.subscriptions.map(sub => `
+                <div class="bg-slate-800/80 rounded-xl border border-slate-700 p-4 hover:border-purple-500 transition flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-white text-sm mb-1">${sub.name}</h4>
+                        <span class="text-xs text-purple-400 bg-purple-900/30 px-2 py-0.5 rounded inline-block mb-3">${sub.period}</span>
+                    </div>
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-700">
+                        <span class="font-bold text-emerald-400 text-sm">${formatPrice(sub.price)}</span>
+                        <button onclick="openPurchaseModal('${sub.name}', ${sub.price})" class="bg-slate-700 hover:bg-purple-600 text-white text-xs px-3 py-1.5 rounded-lg transition">اشتراك</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAccounts() {
+            const container = document.getElementById('accountsContainer');
+            if (!container) return;
+            container.innerHTML = appData.accounts.map(acc => `
+                <div class="bg-slate-800/80 rounded-xl border border-slate-700 p-4 hover:border-purple-500 transition flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-white text-sm mb-2">${acc.name}</h4>
+                        <p class="text-xs text-gray-400 mb-3">${acc.desc}</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-700">
+                        <span class="font-bold text-emerald-400 text-sm">${formatPrice(acc.price)}</span>
+                        <button onclick="openPurchaseModal('${acc.name}', ${acc.price})" class="bg-slate-700 hover:bg-purple-600 text-white text-xs px-3 py-1.5 rounded-lg transition">شراء الحساب</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* Modal Purchase Functions */
+        function openPurchaseModal(name, price) {
+            activeItemToBuy = { name, price };
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('modalPrice').innerText = formatPrice(price);
+            document.getElementById('playerIdInput').value = '';
+            document.getElementById('modalMsg').classList.add('hidden');
+            document.getElementById('purchaseModal').classList.remove('hidden');
+        }
+
+        function closePurchaseModal() {
+            document.getElementById('purchaseModal').classList.add('hidden');
+        }
+
+        function processPurchase() {
+            const playerId = document.getElementById('playerIdInput').value.trim();
+            const msgEl = document.getElementById('modalMsg');
+
+            if (!playerId) {
+                msgEl.innerText = "يرجى كتابة الـ ID أولاً!";
+                msgEl.className = "text-xs font-bold mb-3 p-2.5 rounded-xl bg-red-900/50 text-red-300 border border-red-500/30";
+                msgEl.classList.remove('hidden');
+                return;
+            }
+
+            if (userBalance < activeItemToBuy.price) {
+                msgEl.innerText = "رصيدك غير كافٍ! يرجى شحن حسابك من لوحة التحكم.";
+                msgEl.className = "text-xs font-bold mb-3 p-2.5 rounded-xl bg-amber-900/50 text-amber-300 border border-amber-500/30";
+                msgEl.classList.remove('hidden');
+                return;
+            }
+
+            userBalance -= activeItemToBuy.price;
+            saveState();
+            renderHeader();
+
+            msgEl.innerText = `تم الشحن بنجاح لـ ${playerId}! تم خصم ${formatPrice(activeItemToBuy.price)}`;
+            msgEl.className = "text-xs font-bold mb-3 p-2.5 rounded-xl bg-emerald-900/50 text-emerald-300 border border-emerald-500/30";
+            msgEl.classList.remove('hidden');
+
+            setTimeout(() => {
+                closePurchaseModal();
+            }, 2000);
+        }
+
+        /* Admin Functions */
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        function verifyAdminPassword() {
+            const pwd = document.getElementById('adminPasswordInput').value;
+            if (pwd === '2009') {
+                document.getElementById('adminLoginSection').classList.add('hidden');
+                document.getElementById('adminDashboardSection').classList.remove('hidden');
+                renderAdminPackages();
+            } else {
+                document.getElementById('adminErrorMsg').classList.remove('hidden');
+            }
+        }
+
+        function switchAdminTab(tab) {
+            document.getElementById('adminTabPackages').classList.add('hidden');
+            document.getElementById('adminTabBalance').classList.add('hidden');
+            document.getElementById('adminTabGeneral').classList.add('hidden');
+
+            document.getElementById('tabBtnPackages').className = "pb-2 border-b-2 border-transparent text-gray-400 hover:text-white";
+            document.getElementById('tabBtnBalance').className = "pb-2 border-b-2 border-transparent text-gray-400 hover:text-white";
+            document.getElementById('tabBtnGeneral').className = "pb-2 border-b-2 border-transparent text-gray-400 hover:text-white";
+
+            if (tab === 'packages') {
+                document.getElementById('adminTabPackages').classList.remove('hidden');
+                document.getElementById('tabBtnPackages').className = "pb-2 border-b-2 border-purple-500 text-purple-400";
+            } else if (tab === 'balance') {
+                document.getElementById('adminTabBalance').classList.remove('hidden');
+                document.getElementById('tabBtnBalance').className = "pb-2 border-b-2 border-purple-500 text-purple-400";
+            } else {
+                document.getElementById('adminTabGeneral').classList.remove('hidden');
+                document.getElementById('tabBtnGeneral').className = "pb-2 border-b-2 border-purple-500 text-purple-400";
+            }
+        }
+
+        function renderAdminPackages() {
+            const container = document.getElementById('adminPackagesList');
+            container.innerHTML = appData.packages.map((pkg) => `
+                <div class="flex items-center justify-between bg-slate-800 p-2.5 rounded-xl border border-slate-700 text-xs">
+                    <div>
+                        <span class="font-bold text-white">${pkg.name}</span>
+                        <span class="text-purple-400 mr-2">(${pkg.gameId})</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold text-emerald-400">${formatPrice(pkg.price)}</span>
+                        <button onclick="deletePackage(${pkg.id})" class="text-red-400 hover:text-red-300">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addNewPackage() {
+            const gameId = document.getElementById('adminGameSelect').value;
+            const name = document.getElementById('adminPkgName').value.trim();
+            const price = parseFloat(document.getElementById('adminPkgPrice').value);
+
+            if (!name || isNaN(price)) {
+                alert('يرجى ملء كافة معلومات الباقة بأسلوب صحيح!');
+                return;
+            }
+
+            const newPkg = { id: Date.now(), gameId, name, price, popular: false };
+            appData.packages.push(newPkg);
+            saveState();
+            renderPackages();
+            renderAdminPackages();
+
+            document.getElementById('adminPkgName').value = '';
+            document.getElementById('adminPkgPrice').value = '';
+        }
+
+        function deletePackage(id) {
+            appData.packages = appData.packages.filter(p => p.id !== id);
+            saveState();
+            renderPackages();
+            renderAdminPackages();
+        }
+
+        function addBalanceAdmin() {
+            const amount = parseFloat(document.getElementById('adminAddBalanceInput').value);
+            if (!isNaN(amount) && amount > 0) {
+                userBalance += amount;
+                saveState();
+                renderHeader();
+                alert(`تم شحن ${formatPrice(amount)} لحسابك بنجاح!`);
+                document.getElementById('adminAddBalanceInput').value = '';
+            }
+        }
+
+        function saveGeneralSettings() {
+            const phone = document.getElementById('cfgStorePhone').value;
+            const email = document.getElementById('cfgStoreEmail').value;
+
+            document.getElementById('displayTopPhone').innerText = phone;
+            document.getElementById('displayTopEmail').innerText = email;
+            document.getElementById('displayFooterPhone').innerText = phone;
+            document.getElementById('displayFooterEmail').innerText = email;
+
+            alert('تم حفظ إعدادات التواصل بنجاح!');
+        }
+
+        // Initialize App
+        renderHeader();
+        renderGameTabs();
+        renderPackages();
+        renderCards();
+        renderSubscriptions();
+        renderAccounts();
+    </script>
+</body>
+</html>
